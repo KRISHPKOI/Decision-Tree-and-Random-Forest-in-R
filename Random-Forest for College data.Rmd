@@ -1,0 +1,55 @@
+---
+title: "College data prediction using Decision-Tree"
+author: "Krishna P Koirala"
+date: "6/20/2018"
+output:
+    md_document:
+     variant: markdown_github
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ISLR)
+df <- College
+```
+
+```{r}
+str(df)
+```
+
+```{r}
+summary(df)
+```
+
+# Visualize data
+
+```{r}
+library(ggplot2)
+ggplot(aes(Room.Board, Grad.Rate), data = df) + geom_point(aes(color = Private), size = 2, alpha = 0.6)
+```
+
+```{r}
+ggplot(aes(F.Undergrad), data = df) + geom_histogram(aes(fill = Private), color = 'black', bins = 50) + theme_classic()
+```
+
+```{r}
+ggplot(aes(Grad.Rate), data = df) + geom_histogram(aes(fill = Private), color = 'black', bins = 50, alpha = .5) + theme_classic()
+```
+
+```{r}
+library(dplyr)
+filter(df, Grad.Rate >100)
+```
+
+```{r}
+df['Cazenovia College', 'Grad.Rate'] <-100
+filter(df, Grad.Rate >100)
+```
+
+```{r}
+
+```
+
