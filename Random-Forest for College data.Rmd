@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
+rm(list = ls())
 library(ISLR)
 df <- College
 ```
@@ -49,7 +50,83 @@ df['Cazenovia College', 'Grad.Rate'] <-100
 filter(df, Grad.Rate >100)
 ```
 
-```{r}
+# Data Partition
 
+```{r}
+library(caret)
+library(lattice)
+set.seed(101)
+trainIndex <- createDataPartition(df$Private, p = 0.7, list = FALSE)
+train <- df[trainIndex,]
+test <- df[-trainIndex,]
 ```
+
+# Making Model
+
+```{r}
+# class is for classification. Because it can also used for regression.
+library(rpart)
+tree <- rpart(Private~.,method = 'class', data = train)
+```
+
+```{r}
+summary(tree)
+```
+
+# Prediction of test data using model
+
+```{r}
+predicted <- predict(tree, test)
+str(predicted); head(predicted)
+```
+
+# Change two columns(NO, Yes) of predicted to one single column as in train set
+
+```{r}
+sample(df$Private, 10)
+sample(predicted, 10)
+```
+
+
+```{r}
+predicted <- as.data.frame(predicted)
+```
+
+```{r}
+joiner <- function(x){
+    if (x >= 0.5){
+        return('Yes')
+    }else{
+        return('No')
+    }
+}
+```
+
+
+
+
+```{r}
+predicted$Private <- sapply(predicted$Yes, joiner )
+```
+
+```{r}
+head(predicted)
+```
+
+# Confusion Matrix
+
+```{r}
+# From the confusion matrix we can find accuracy, recall, precision according to the business need.
+table(predicted$Private, test$Private)
+```
+
+# Plot the model
+
+```{r}
+library(rpart.plot)
+prp(tree)
+```
+
+
+
 
