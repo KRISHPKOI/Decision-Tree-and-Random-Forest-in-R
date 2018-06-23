@@ -128,5 +128,17 @@ prp(tree)
 ```
 
 
+# Using Random Forest on same data set
 
+# Model building
+```{r}
+# importance = TRUE, gives all importance items in the model
+library(randomForest)
+rf.model <- randomForest(Private~., data = train, importance = TRUE)
+rf.predicted <- predict(rf.model, test)
+table(rf.predicted, test$Private)
+```
+
+
+From this we can calculate Accuracy, Precision, Recall depending on our need.
 
